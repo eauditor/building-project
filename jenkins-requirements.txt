@@ -1,0 +1,42 @@
+Installing Jenkins:
+Step 1:
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo "deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+Step 2:
+sudo apt-get update
+Step 3:
+sudo apt-get install jenkins
+Step 4:
+    - Setup the local jenkins build using this:
+jenkins --httpsListenAddress=localhost --httpPort=port
+Step 4a:
+    - If using Docker containerization to setup jenkins do this:
+TODO Docker container with jenkins build
+
+May need to update Java to JRE-17
+Step 1:
+sudo apt update
+Step 2:
+sudo apt install fontconfig openjdk-17-jre
+Step 3:
+java -version
+
+Additional: If using a local jenkins instance, I used NGROK to create a public facing IP for the github webhook
+Step 1:
+curl -sSL https://ngrok-agent.s3.amazonaws.com/ngrok.asc \
+  | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null \
+  && echo "deb https://ngrok-agent.s3.amazonaws.com buster main" \
+  | sudo tee /etc/apt/sources.list.d/ngrok.list \
+  && sudo apt update \
+  && sudo apt install ngrok
+Step 2:
+    - Sign up for a free account to create a free personal access token
+ngrok config add-authtoken <token>
+Step 3:
+    - Start the endpoint at the port where the local jenkins faces likely port 80 or 8080
+ngrok http https://localhost:port
+Step 4:
+    - Paste the 'Forwarding' URL in the githubs webhook url
